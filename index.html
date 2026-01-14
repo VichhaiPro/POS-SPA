@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS NamSpa-SHOP សេវាកម្ម</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>POS NamSpa-SHOP សេវាកម្ម</h1>
+            <p>គ្រប់គ្រងសេវាកម្មស្ប៉ារបស់អ្នកយ៉ាងងាយស្រួល</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="service-list-section">
+            <h2>បញ្ជីសេវាកម្ម</h2>
+            <div id="service-list" class="service-grid">
+                <!-- Services will be loaded here by JavaScript -->
+            </div>
+            <button id="print-button" class="btn primary-btn">បោះពុម្ពបញ្ជីសេវាកម្ម</button>
+        </section>
+
+        <section id="add-service-section">
+            <h2>បន្ថែមសេវាកម្មថ្មី</h2>
+            <form id="add-service-form">
+                <div class="form-group">
+                    <label for="service-name">ឈ្មោះសេវាកម្ម:</label>
+                    <input type="text" id="service-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="service-price">តម្លៃ (៛):</label>
+                    <input type="number" id="service-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="service-description">ការពិពណ៌នា:</label>
+                    <textarea id="service-description" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn secondary-btn">បន្ថែមសេវាកម្ម</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 POS NamSpa-SHOP</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
