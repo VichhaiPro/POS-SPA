@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS NamSpa-SHOP សេវាកម្ម</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -23,6 +23,30 @@
             <button id="print-button" class="btn primary-btn">បោះពុម្ពបញ្ជីសេវាកម្ម</button>
         </section>
 
+        <section id="order-list-section">
+            <h2>បញ្ជីការបញ្ជាទិញ</h2>
+            <div id="order-list">
+                <p id="order-empty-message">មិនទាន់មានសេវាកម្មណាមួយត្រូវបានបន្ថែមទៅក្នុងបញ្ជាទិញនៅឡើយទេ។</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>សេវាកម្ម</th>
+                            <th>តម្លៃ (USD)</th>
+                            <th>បរិមាណ</th>
+                            <th>សរុប</th>
+                            <th>សកម្មភាព</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-items">
+                        <!-- Order items will be loaded here by JavaScript -->
+                    </tbody>
+                </table>
+                <div class="order-total">
+                    <strong>សរុបរួម: <span id="order-total-price">0.00</span> USD</strong>
+                </div>
+            </div>
+        </section>
+
         <section id="add-service-section">
             <h2>បន្ថែមសេវាកម្មថ្មី</h2>
             <form id="add-service-form">
@@ -31,7 +55,7 @@
                     <input type="text" id="service-name" required>
                 </div>
                 <div class="form-group">
-                    <label for="service-price">តម្លៃ (៛):</label>
+                    <label for="service-price">តម្លៃ (USD):</label>
                     <input type="number" id="service-price" step="0.01" required>
                 </div>
                 <div class="form-group">
@@ -49,6 +73,6 @@
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
