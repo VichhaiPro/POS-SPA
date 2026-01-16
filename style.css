@@ -1,60 +1,449 @@
-/* Basic layout and typography */
-:root{
-  --primary:#4a90e2;
-  --secondary:#f5f7fa;
-  --accent:#ff7b7b;
-  --muted:#6b7280;
-  --bg:#ffffff;
-  --card-bg:#fbfcfe;
-  --radius:8px;
-}
-*{box-sizing:border-box}
-body{font-family:Segoe UI, Roboto, "Noto Sans Khmer", system-ui, -apple-system, Arial, sans-serif;margin:0;background:var(--secondary);color:#111}
-.container{max-width:1100px;margin:0 auto;padding:20px}
-header{background:linear-gradient(90deg,var(--primary),#6fb3ff);color:#fff;padding:20px 0}
-header h1{margin:0;font-size:1.6rem}
-header p{margin:6px 0 0;font-size:0.95rem;opacity:0.95}
-main{padding:24px 0}
-section{margin-bottom:28px;background:transparent}
-.service-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-.service-item{background:var(--card-bg);border-radius:var(--radius);padding:14px;box-shadow:0 1px 3px rgba(16,24,40,0.06);border:1px solid rgba(0,0,0,0.04)}
-.service-item h3{margin:0 0 8px;font-size:1.05rem}
-.service-item p{margin:6px 0;color:var(--muted);font-size:0.92rem}
-.service-item .price{color:#111;font-weight:600;margin-top:6px}
-.service-item .discount{color:#0b7a3e;font-weight:600}
-.btn{display:inline-block;padding:8px 12px;border-radius:6px;border:none;background:#e6eefc;color:var(--primary);cursor:pointer;font-weight:600}
-.btn:hover{opacity:0.95}
-.primary-btn{background:var(--primary);color:#fff}
-.secondary-btn{background:#fff;border:1px solid rgba(0,0,0,0.08);color:var(--primary)}
-form .form-group{margin-bottom:12px}
-label{display:block;margin-bottom:6px;font-weight:600}
-input[type=text],input[type=number],textarea{width:100%;padding:8px;border-radius:6px;border:1px solid #e6e9ef;background:#fff}
-table{width:100%;border-collapse:collapse;margin-top:12px;background:#fff;border-radius:6px;overflow:hidden}
-thead th{background:#f3f4f6;text-align:left;padding:10px;font-weight:700;color:#111}
-tbody td{padding:10px;border-top:1px solid #f1f5f9}
-.order-total{margin-top:12px;padding:12px;background:#fff;border-radius:6px}
-.order-grid{display:grid;grid-template-columns:1fr 320px;gap:20px}
-#order-list{margin-top:8px}
-#order-empty-message{color:var(--muted);background:#fff;padding:12px;border-radius:6px}
-.editing{outline:2px dashed #ffd580}
-@media (max-width:800px){
-  .service-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
-  .order-grid{grid-template-columns:1fr}
-  header h1{font-size:1.2rem}
-}
-/* Print styles */
-@media print{
-  body{background:#fff;color:#000}
-  header, footer, #add-service-section, .btn{display:none}
-  .service-item{box-shadow:none;border:1px solid #000}
-  table, thead, tbody, tr, td, th{color:#000}
+/* General Styles */
+:root {
+    --primary-color: #6a1b9a; /* Deep Purple */
+    --primary-color-dark: #4a148c; /* Darker Purple */
+    --secondary-color: #ffab00; /* Amber */
+    --light-gray: #f5f5f5;
+    --dark-gray: #333;
+    --white: #fff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
 }
 
-/* Small helpers */
-.text-right{text-align:right}
-.muted{color:var(--muted)}
+body {
+    font-family: 'Khmer OS Siemreap', 'Roboto', sans-serif;
+    margin: 0;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-/* Accessibility */
-button:focus, input:focus, textarea:focus{box-shadow:0 0 0 3px rgba(74,144,226,0.18);outline:none}
+.container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-/* End of file */
+/* Header */
+header {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 1.5em 0;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2em;
+    font-weight: 700;
+    font-family: 'Khmer OS Muol Light', 'Roboto', sans-serif;
+}
+
+header p {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding: 30px 0;
+    display: grid;
+    grid-template-columns: 55% 45%; /* Half each for service and order list */
+    gap: 30px;
+}
+
+h2 {
+    color: var(--primary-color);
+    text-align: left;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: 600;
+    font-family: 'Khmer OS Muol Light', 'Roboto', sans-serif;
+}
+
+/* Service List */
+#service-list-section {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow-y: auto;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.service-item {
+    background-color: var(--light-gray);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.service-item h3 {
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+    font-weight: 600;
+    font-family: 'Khmer OS Siemreap', 'Roboto', sans-serif;
+}
+
+.service-item p {
+    margin: 0 0 15px 0;
+    color: #555;
+    flex-grow: 1;
+    font-size: 0.8em;
+    min-height: 50px;
+}
+
+.service-item .price {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--primary-color-dark);
+    text-align: right;
+}
+
+/* Add Service Form */
+#add-service-section {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-top: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.2);
+    outline: none;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'Khmer OS Siemreap', 'Roboto', sans-serif;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.primary-btn:hover {
+    background-color: var(--primary-color-dark);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    color: var(--dark-gray);
+}
+
+.secondary-btn:hover {
+    background-color: #ffc400; /* Darker Amber */
+}
+
+.add-to-order-btn {
+    background-color: #4caf50; /* Green */
+    color: var(--white);
+    width: 100%;
+}
+
+.add-to-order-btn:hover {
+    background-color: #41d07a;
+    transform: scale(1.05);
+}
+
+/* Order List Styles */
+#order-list-section {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+}
+
+#order-list {
+    flex-grow: 1;
+}
+
+#order-empty-message {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+    margin: 40px 0;
+    font-size: 1.1em;
+}
+
+#order-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    display: block; /* Make table a block to allow tbody to scroll */
+    table-layout: fixed;
+}
+
+#order-list thead {
+    display: table; /* Ensure thead remains at the top */
+    width: 100%;
+    table-layout: fixed; /* Fix table layout for proper column alignment */
+}
+
+#order-list tbody {
+    display: block; /* Make tbody a block to enable scrolling */
+    /* Removed max-height to allow full vertical expansion */
+    overflow-y: auto; /* Enable vertical scrolling if content exceeds available space */
+    width: 100%;
+    table-layout: fixed; /* Fix table layout for proper column alignment */
+}
+
+#order-list th, #order-list td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    width: 16.66%; /* Default width for 6 columns */
+}
+
+#order-list th:nth-of-type(1), #order-list td:nth-of-type(1) { width: 30%; } /* Service */
+#order-list th:nth-of-type(2), #order-list td:nth-of-type(2) { width: 15%; } /* Price */
+#order-list th:nth-of-type(3), #order-list td:nth-of-type(3) { width: 10%; } /* Qty */
+#order-list th:nth-of-type(4), #order-list td:nth-of-type(4) { width: 15%; } /* Disc. (%) */
+#order-list th:nth-of-type(5), #order-list td:nth-of-type(5) { width: 15%; } /* Total */
+#order-list th:nth-of-type(6), #order-list td:nth-of-type(6) { width: 15%; } /* Action */
+
+#order-list th {
+    background-color: var(--light-gray);
+    color: var(--primary-color);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.order-summary > div {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 1.1em;
+}
+
+.order-total {
+    font-size: 1.6em !important;
+    font-weight: bold;
+    color: var(--primary-color-dark);
+    border-top: 2px solid var(--primary-color);
+    margin-top: 10px;
+    padding-top: 10px !important;
+}
+
+.remove-item-btn {
+    background-color: #e53935; /* Red */
+    color: var(--white);
+    padding: 6px 12px;
+    font-size: 0.9em;
+    border-radius: 6px;
+    margin: 0;
+}
+
+.remove-item-btn:hover {
+    background-color: #c62828;
+}
+
+/* Footer */
+footer {
+    background-color: var(--dark-gray);
+    color: var(--white);
+    text-align: center;
+    padding: 1.5em 0;
+    margin-top: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    main {
+        grid-template-columns: 1fr 1fr; /* Half each */
+    }
+}
+
+@media (max-width: 992px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+    #order-list-section {
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    #order-list table, 
+    #order-list thead, 
+    #order-list tbody, 
+    #order-list th, 
+    #order-list td, 
+    #order-list tr {
+        display: block;
+    }
+
+    #order-list thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    #order-list tr {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    #order-list td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+
+    #order-list td:before {
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+        content: attr(data-label);
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+    header h1 {
+        font-size: 1.8em;
+    }
+    .btn {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+
+.pos-receipt {
+    font-family: 'monospace';
+    font-size: 10px;
+    width: 300px; /* Approx 80mm */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.pos-receipt h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.pos-receipt p {
+    margin-bottom: 5px;
+}
+
+.pos-receipt hr {
+    border-top: 1px dashed #000;
+    margin: 10px 0;
+}
+
+.pos-receipt .item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
+}
+
+.pos-receipt .item span:first-child {
+    flex: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin-right: 10px;
+}
+
+.pos-receipt .item span:last-child {
+    white-space: nowrap;
+}
+
+.pos-receipt .total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background-color: #fff;
+        color: #000;
+        margin: 0;
+    }
+    header, footer, #add-service-section, .btn, main > div, aside#order-list-section {
+        display: none;
+    }
+    #pos-receipt-print-area {
+        display: block !important;
+    }
+    .pos-receipt {
+        width: 100%; /* Use full width of the print area */
+        font-size: 12px; /* Slightly larger for readability on some printers */
+    }
+}

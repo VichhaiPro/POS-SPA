@@ -4,35 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS NamSpa-SHOP សេវាកម្ម</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>POS NamSpa-SHOP សេវាកម្ម</h1>
-            <p>គ្រប់គ្រងសេវាកម...    <h2>បន្ថែមសេវាកម្មថ្មី</h2>
-            <form id="add-service-form">
-                <input type="hidden" id="editing-index" value="">
-                <div class="form-group">
-                    <label for="service-name">ឈ្មោះសេវាកម្ម:</label>
-                    <input type="text" id="service-name" required>
+            <h1>POS NamSpa-SHOP</h1>
+            <p>ប្រព័ន្ធគ្រប់គ្រងការលក់សម្រាប់ហាងស្ប៉ា</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div>
+            <section id="service-list-section">
+                <h2>សេវាកម្មដែលមាន</h2>
+                <div id="service-list" class="service-grid">
+                    <!-- Services will be loaded here by JavaScript -->
                 </div>
-                <div class="form-group">
-                    <label for="service-price">តម្លៃ (USD):</label>
-                    <input type="number" id="service-price" step="0.01" required>
+            </section>
+
+            <section id="add-service-section">
+                <h2>បន្ថែម​សេវាកម្ម​ថ្មី</h2>
+                <form id="add-service-form">
+                    <div class="form-group">
+                        <label for="service-name">ឈ្មោះ​សេវាកម្ម:</label>
+                        <input type="text" id="service-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service-price">តម្លៃ (USD):</label>
+                        <input type="number" id="service-price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service-description">ការពិពណ៌នា:</label>
+                        <textarea id="service-description" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn secondary-btn">បន្ថែម​សេវាកម្ម</button>
+                </form>
+            </section>
+        </div>
+
+        <aside id="order-list-section">
+            <h2>បញ្ជីសេវាកម្ម</h2>
+            <div class="form-group">
+                <label for="customer-name">ឈ្មោះ​អតិថិជន:</label>
+                <input type="text" id="customer-name" placeholder="បញ្ចូលឈ្មោះអតិថិជន">
+            </div>
+            <div id="order-list">
+                <p id="order-empty-message">ការពិពណ៌នា</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>សេវាកម្ម</th>
+                            <th>តម្លៃ</th>
+                            <th>ចំនួន</th>
+                            <th>បញ្ចុះតម្លៃ (%)</th>
+                            <th>សរុប</th>
+                            <th>សកម្មភាព</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-items">
+                        <!-- Order items will be loaded here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="order-summary">
+                <div class="order-subtotal">
+                    <span>សរុបរង:</span>
+                    <span id="order-subtotal-price">0.00</span> USD
                 </div>
-                <div class="form-group">
-                    <label for="service-discount">បញ្ចុះតម្លៃ (%):</label>
-                    <input type="number" id="service-discount" step="0.01" min="0" max="100" value="0">
+                <div class="order-discount">
+                    <span>បញ្ចុះតម្លៃសរុប:</span>
+                    <span id="order-total-discount">0.00</span> USD
                 </div>
-                <div class="form-group">
-                    <label for="service-description">ការពិពណ៌នា:</label>
-                    <textarea id="service-description" rows="3"></textarea>
+                <div class="order-total">
+                    <strong>សរុប:</strong>
+                    <strong><span id="order-total-price">0.00</span> USD</strong>
                 </div>
-                <button type="submit" id="submit-service-btn" class="btn secondary-btn">បន្ថែមសេវាកម្ម</button>
-                <button type="button" id="cancel-edit-button" class="btn" style="display:none;margin-left:8px;">បោះបង់</button>
-            </form>
-        </section>
+            </div>
+
+            <div class="order-actions">
+                <button id="pay-button" class="btn primary-btn">Pay</button>
+                <button id="print-order-button" class="btn primary-btn">បោះពុម្ពវិក្កយបត្រ</button>
+                <button id="save-jpg-button" class="btn secondary-btn">រក្សាទុក ជា JPG</button>
+                <button id="clear-receipt-button" class="btn secondary-btn">សម្អាតទាំងអស់</button>
+            </div>
+
+            <div id="aba-qr-payment-section" style="display: none; margin-top: 20px; text-align: center;">
+                <h4>ABA QR Payment</h4>
+                <img id="aba-qr-code-image" src="" alt="ABA QR Code">
+                <p>Total: <span id="aba-payment-amount">0.00</span> USD</p>
+                <button id="confirm-aba-payment-button" class="btn primary-btn">Confirm Payment</button>
+                <button id="cancel-aba-payment-button" class="btn secondary-btn">Cancel</button>
+            </div>
+        </aside>
     </main>
 
     <footer>
@@ -41,6 +107,9 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
+    <div id="pos-receipt-print-area" style="display: none;"></div>
 </body>
 </html>
