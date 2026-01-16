@@ -1,334 +1,270 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Service-related elements
-    const serviceListDiv = document.getElementById('service-list');
-    const addServiceForm = document.getElementById('add-service-form');
-    const serviceNameInput = document.getElementById('service-name');
-    const servicePriceInput = document.getElementById('service-price');
-    const serviceDescriptionInput = document.getElementById('service-description');
-    const addServiceSubmitButton = addServiceForm.querySelector('button[type="submit"]');
+    const productList = document.getElementById('product-list');
+    const cartItems = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const checkoutButton = document.getElementById('checkout-button');
 
-    // Order-related elements
-    const orderItemsTableBody = document.getElementById('order-items');
-    const orderTotalSpan = document.getElementById('order-total-price');
-    const orderSubtotalSpan = document.getElementById('order-subtotal-price');
-    const orderTotalDiscountSpan = document.getElementById('order-total-discount');
-    const orderEmptyMessage = document.getElementById('order-empty-message');
-    const customerNameInput = document.getElementById('customer-name');
-
-    // Action buttons
-    const printOrderButton = document.getElementById('print-order-button');
-    const payButton = document.getElementById('pay-button');
-    const saveJpgButton = document.getElementById('save-jpg-button');
-    const clearReceiptButton = document.getElementById('clear-receipt-button');
-
-    // ABA QR Payment elements
-    const abaQrPaymentSection = document.getElementById('aba-qr-payment-section');
-    const abaQrCodeImage = document.getElementById('aba-qr-code-image');
-    const abaPaymentAmount = document.getElementById('aba-payment-amount');
-    const confirmAbaPaymentButton = document.getElementById('confirm-aba-payment-button');
-    const cancelAbaPaymentButton = document.getElementById('cancel-aba-payment-button');
-
-    // App state
-    let services = [];
-    let order = [];
-    let editingServiceIndex = -1;
-
-    // Initial dummy services
-    const initialServices = [
-        // Existing Spa Services
-        { name: 'ម៉ាស្សាប្រេង', price: 15.00, description: 'ការម៉ាស្សាប្រេងបន្ធូរអារម្មណ៍រយៈពេល ៦០ នាទី។' },
-        { name: 'ម៉ាស្សាថ្ម', price: 25.00, description: 'ការម៉ាស្សាថ្មក្តៅ ដើម្បីបន្ធូរសាច់ដុំតឹង។' },
-        { name: 'ម៉ាស្សាជើង', price: 10.00, description: 'ការម៉ាស្សាជើងរយៈពេល ៣០ នាទី ដើម្បីបំបាត់ភាពអស់កម្លាំង។' },
-        { name: 'ម៉ាស្សាមុខ', price: 20.00, description: 'ការម៉ាស្សាមុខបន្ធូរអារម្មណ៍ ជួយស្បែកមុខភ្លឺថ្លា។' },
-        { name: 'ស្ក្រាប់ដងខ្លួន', price: 35.00, description: 'ស្ក្រាប់ដងខ្លួន ដើម្បីស្បែកទន់រលោង។' },
-        { name: 'រុំដងខ្លួន', price: 40.00, description: 'រុំដងខ្លួនដោយសារធាតុធម្មជាតិដើម្បីបំប៉នស្បែក។' },
-        { name: 'ម៉ាស្សាខ្មែរ', price: 22.00, description: 'ម៉ាស្សាខ្មែរបុរាណជាមួយនឹងបច្ចេកទេសពិសេស។' },
-        { name: 'សម្អាតមុខ', price: 18.00, description: 'សម្អាតមុខយ៉ាងជ្រៅ ដើម្បីឲ្យស្បែកមុខមានសុខភាពល្អ។' },
-        { name: 'ថែរក្សាដៃជើង', price: 28.00, description: 'សេវាកម្មថែរក្សាដៃ និងជើង រួមទាំងការលាបពណ៌ក្រចក។' },
-        { name: 'ដកសក់', price: 8.00, description: 'សេវាកម្មដកសក់តំបន់តូចៗ។' },
-
-        // New Cosmetic Surgery Services
-        { name: 'វះកាត់ត្របកភ្នែក', price: 1200.00, description: 'សេវាកម្មវះកាត់ត្របកភ្នែកពីរជាន់។' },
-        { name: 'វះកាត់ច្រមុះ', price: 2500.00, description: 'សេវាកម្មវះកាត់ច្រមុះ។' },
-        { name: 'វះកាត់បបូរមាត់', price: 800.00, description: 'សេវាកម្មវះកាត់បបូរមាត់។' },
-        { name: 'បូមខ្លាញ់', price: 3000.00, description: 'សេវាកម្មបូមខ្លាញ់ក្បាលពោះ។' },
-        { name: 'ยกกระชับใบหน้า', price: 3500.00, description: 'សេវាកម្មยกกระชับใบหน้า។' },
-        { name: 'វះកាត់เสริมសុដន់', price: 5000.00, description: 'សេវាកម្មវះកាត់เสริมសុដន់។' },
-        { name: 'ចាក់ហ្វីល័រ', price: 500.00, description: 'សេវាកម្មចាក់ហ្វីល័រកែចង្កា។' },
-        { name: 'ចាក់បូថក្ស៍', price: 300.00, description: 'សេវាកម្មចាក់បូថក្ស៍បំបាត់ស្នាមជ្រីវជ្រួញ។' },
-        { name: 'ឡាស៊ែរមុខថ្លា', price: 150.00, description: 'សេវាកម្មឡាស៊ែរមុខថ្លា។' },
-        { name: 'ប្តូរសក់', price: 4000.00, description: 'សេវាកម្មប្តូរសក់។' },
+    let cart = [];
+    let products = [
+        // Services - Surgery Spa Salon (Khmer names)
+        { id: 1, name: 'ការវះកាត់កែសម្ផស្សច្រមុះ', price: 1500.00, discountPercentage: 10 }, // Rhinoplasty
+        { id: 2, name: 'ការវះកាត់បំបាត់ស្នាមជ្រីវជ្រួញ', price: 2500.00, discountPercentage: 10 }, // Facelift
+        { id: 3, name: 'ការបូមខ្លាញ់', price: 3000.00, discountPercentage: 10 }, // Liposuction
+        { id: 4, name: 'ការចាក់បូថុលីញ៉ូម', price: 300.00, discountPercentage: 10 }, // Botox Injection
+        { id: 5, name: 'ការចាក់បំពេញស្បែក', price: 500.00, discountPercentage: 10 }, // Dermal Fillers
+        { id: 6, name: 'ការព្យាបាលដោយឡាស៊ែរស្បែក', price: 400.00, discountPercentage: 10 }, // Laser Skin Resurfacing
+        { id: 7, name: 'ការថែរក្សាផ្ទៃមុខស្ប៉ា', price: 80.00, discountPercentage: 10 }, // Spa Facial Treatment
+        { id: 8, name: 'ការម៉ាស្សាសម្រាកកាយ', price: 60.00, discountPercentage: 10 }, // Relaxation Massage
+        { id: 9, name: 'ការធ្វើក្រចកដៃជើង', price: 40.00, discountPercentage: 10 }, // Manicure & Pedicure
+        { id: 10, name: 'ការដកសក់ដោយឡាស៊ែរ', price: 200.00, discountPercentage: 10 } // Laser Hair Removal
     ];
 
-    // --- DATA PERSISTENCE ---
-    const loadServices = () => {
-        const storedServices = localStorage.getItem('spaServices');
-        services = storedServices ? JSON.parse(storedServices) : initialServices;
-        renderServices();
-    };
-
-    const saveServices = () => {
-        localStorage.setItem('spaServices', JSON.stringify(services));
-    };
-
-    const loadOrder = () => {
-        const storedOrder = localStorage.getItem('spaOrder');
-        if (storedOrder) {
-            order = JSON.parse(storedOrder);
-            renderOrder();
-        }
-    };
-
-    const saveOrder = () => {
-        localStorage.setItem('spaOrder', JSON.stringify(order));
-    };
-
-    // --- RENDERING ---
-    const renderServices = () => {
-        serviceListDiv.innerHTML = '';
-        services.forEach((service, index) => {
-            const serviceItem = document.createElement('div');
-            serviceItem.classList.add('service-item');
-            serviceItem.innerHTML = `
-                <h3>${service.name}</h3>
-                <p>${service.description}</p>
-                <div class="price">${service.price.toFixed(2)}</div>
-                <button class="btn add-to-order-btn" data-index="${index}">បន្ថែម</button>
-                <button class="btn edit-service-btn" data-index="${index}">កែប្រែ</button>
-            `;
-            serviceListDiv.appendChild(serviceItem);
-        });
-        attachServiceButtonListeners();
-    };
-
-    const renderOrder = () => {
-        orderItemsTableBody.innerHTML = '';
-        if (order.length === 0) {
-            orderEmptyMessage.style.display = 'block';
-            orderItemsTableBody.parentElement.style.display = 'none';
-        } else {
-            orderEmptyMessage.style.display = 'none';
-            orderItemsTableBody.parentElement.style.display = 'table';
-            order.forEach((item, index) => {
-                const row = document.createElement('tr');
-                const itemTotal = item.price * item.quantity * (1 - item.discount / 100);
-                row.innerHTML = `
-                    <td data-label="សេវាកម្ម">${item.name}</td>
-                    <td data-label="តម្លៃ">${item.price.toFixed(2)}</td>
-                    <td data-label="បរិមាณ"><input type="number" min="1" value="${item.quantity}" class="item-quantity-input" data-index="${index}"></td>
-                    <td data-label="បញ្ចុះតម្លៃ (%)"><input type="number" min="0" max="100" value="${item.discount}" class="item-discount-input" data-index="${index}"></td>
-                    <td data-label="សរុប">${itemTotal.toFixed(2)}</td>
-                    <td data-label="សកម្មភាព"><button class="btn remove-item-btn" data-name="${item.name}">លុប</button></td>
-                `;
-                orderItemsTableBody.appendChild(row);
-            });
-        }
-        attachOrderModificationListeners();
-        calculateOrderTotal();
-    };
-
-    // --- EVENT LISTENERS ---
-    const attachServiceButtonListeners = () => {
-        document.querySelectorAll('.add-to-order-btn').forEach(btn => {
-            btn.addEventListener('click', e => addServiceToOrder(services[e.target.dataset.index]));
-        });
-        document.querySelectorAll('.edit-service-btn').forEach(btn => {
-            btn.addEventListener('click', e => editService(e.target.dataset.index));
-        });
-    };
-
-    const attachOrderModificationListeners = () => {
-        document.querySelectorAll('.remove-item-btn').forEach(btn => {
-            btn.addEventListener('click', e => removeOrderItem(e.target.dataset.name));
-        });
-        document.querySelectorAll('.item-quantity-input, .item-discount-input').forEach(input => {
-            input.addEventListener('change', e => {
-                const index = e.target.dataset.index;
-                const property = e.target.classList.contains('item-quantity-input') ? 'quantity' : 'discount';
-                order[index][property] = parseFloat(e.target.value);
-                saveOrder();
-                renderOrder();
-            });
-        });
-    };
-
-    // --- CORE LOGIC ---
-    const addServiceToOrder = (service) => {
-        const existingItem = order.find(item => item.name === service.name);
-        if (existingItem) {
-            existingItem.quantity++;
-        } else {
-            order.push({ ...service, quantity: 1, discount: 0 });
-        }
-        saveOrder();
-        renderOrder();
-    };
-
-    const removeOrderItem = (serviceName) => {
-        order = order.filter(item => item.name !== serviceName);
-        saveOrder();
-        renderOrder();
-    };
-
-    const editService = (index) => {
-        const service = services[index];
-        serviceNameInput.value = service.name;
-        servicePriceInput.value = service.price;
-        serviceDescriptionInput.value = service.description;
-        addServiceSubmitButton.textContent = 'ปรับปรุงบริการ';
-        editingServiceIndex = index;
-    };
-
-    addServiceForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const serviceData = {
-            name: serviceNameInput.value.trim(),
-            price: parseFloat(servicePriceInput.value),
-            description: serviceDescriptionInput.value.trim()
-        };
-
-        if (serviceData.name && !isNaN(serviceData.price) && serviceData.price > 0) {
-            if (editingServiceIndex > -1) {
-                services[editingServiceIndex] = serviceData;
-            } else {
-                services.push(serviceData);
-            }
-            saveServices();
-            renderServices();
-            addServiceForm.reset();
-            addServiceSubmitButton.textContent = 'បន្ថែម​សេវាកម្ម';
-            editingServiceIndex = -1;
-        } else {
-            alert('សូមបញ្ចូលឈ្មោះ និងតម្លៃសេវាកម្មអោយបានត្រឹមត្រូវ');
-        }
-    });
-
-    const calculateOrderTotal = () => {
-        let subtotal = 0, totalDiscount = 0;
-        order.forEach(item => {
-            const itemTotal = item.price * item.quantity;
-            subtotal += itemTotal;
-            totalDiscount += itemTotal * (item.discount / 100);
-        });
-        const finalTotal = subtotal - totalDiscount;
-
-        orderSubtotalSpan.textContent = subtotal.toFixed(2);
-        orderTotalDiscountSpan.textContent = totalDiscount.toFixed(2);
-        orderTotalSpan.textContent = finalTotal.toFixed(2);
-    };
-
-    const clearOrder = () => {
-        order = [];
-        customerNameInput.value = '';
-        saveOrder();
-        renderOrder();
-    };
-    clearReceiptButton.addEventListener('click', clearOrder);
-
-    // --- ACTIONS & INTEGRATIONS ---
-
-    // Payment
-    payButton.addEventListener('click', () => {
-        const total = orderTotalSpan.textContent;
-        if (parseFloat(total) <= 0) return alert('មិនអាចដំណើរការការទូទាត់សម្រាប់ការបញ្ជាទិញដែលនៅទំនេរបានទេ');
-        
-        const qrData = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ABA_PAYMENT_${total}`;
-        abaQrCodeImage.src = qrData;
-        abaPaymentAmount.textContent = `${total}`;
-        abaQrPaymentSection.style.display = 'block';
-    });
-
-    confirmAbaPaymentButton.addEventListener('click', () => {
-        alert(`ការទូទាត់ចំនួន ${orderTotalSpan.textContent} បានបញ្ជាក់! (ក្លែងធ្វើ)`);
-        abaQrPaymentSection.style.display = 'none';
-        clearOrder();
-    });
-
-    cancelAbaPaymentButton.addEventListener('click', () => {
-        abaQrPaymentSection.style.display = 'none';
-    });
-
-    // Printing and Saving
-    const generateReceiptHTML = () => {
-        const subtotal = parseFloat(orderSubtotalSpan.textContent).toFixed(2);
-        const totalDiscount = parseFloat(orderTotalDiscountSpan.textContent).toFixed(2);
-        const total = parseFloat(orderTotalSpan.textContent).toFixed(2);
-
-        let itemsHtml = order.map(item => {
-            let itemHtml = `
-                <div class="item" style="margin-bottom: 5px;">
-                    <span>${item.name} (${item.quantity}x)</span>
-                    <span>${(item.price * item.quantity).toFixed(2)}</span>
-                </div>
-            `;
-            if (item.discount > 0) {
-                const discountAmount = (item.price * item.quantity * (item.discount / 100)).toFixed(2);
-                itemHtml += `
-                    <div class="item" style="font-size: 0.9em; color: #555; padding-left: 15px; margin-bottom: 5px;">
-                        <span>បញ្ចុះតម្លៃ (${item.discount}%):</span>
-                        <span>-${discountAmount}</span>
-                    </div>
-                `;
-            }
-            return itemHtml;
-        }).join('');
-
-        return `
-            <div class="pos-receipt">
-                <h3>វិក្កយបត្រ NamSpa</h3>
-                <p>អតិថិជន: ${customerNameInput.value || 'ភ្ញៀវទូទៅ'}</p>
-                <hr>
-                ${itemsHtml}
-                <hr>
-                <div class="total" style="margin-top: 10px;">
-                    <span>សរុបរង:</span>
-                    <span>${subtotal}</span>
-                </div>
-                <div class="total" style="margin-top: 5px;">
-                    <span>បញ្ចុះតម្លៃសរុប:</span>
-                    <span>${totalDiscount}</span>
-                </div>
-                <div class="total" style="margin-top: 5px; font-size: 1.2em;">
-                    <span>សរុបរួម:</span>
-                    <span>${total}</span>
-                </div>
-            </div>
-        `;
-    };
-
-    printOrderButton.addEventListener('click', () => {
-        const receiptContent = generateReceiptHTML();
-        const printArea = document.getElementById('pos-receipt-print-area');
-        printArea.innerHTML = receiptContent;
-        
-        const originalContent = document.body.innerHTML;
-        document.body.innerHTML = printArea.innerHTML;
-        window.print();
-        document.body.innerHTML = originalContent;
-        clearOrder(); // Clear everything after printing
-        initialize(); // Re-initialize listeners
-    });
-
-    saveJpgButton.addEventListener('click', () => {
-        const receiptContent = generateReceiptHTML();
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = receiptContent;
-        document.body.appendChild(tempDiv);
-        
-        html2canvas(tempDiv.querySelector('.pos-receipt')).then(canvas => {
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL('image/jpeg');
-            link.download = 'receipt.jpg';
-            link.click();
-            document.body.removeChild(tempDiv);
-        });
-    });
-
-    // --- INITIALIZATION ---
-    function initialize() {
-        loadServices();
-        loadOrder();
+    function calculateDiscountedPrice(itemOrProduct) {
+        const discount = itemOrProduct.discountPercentage !== undefined ? itemOrProduct.discountPercentage : 0;
+        return itemOrProduct.price * (1 - (discount / 100));
     }
 
-    initialize();
+    function renderProducts() {
+        productList.innerHTML = '';
+        products.forEach(product => {
+            const discountedPrice = calculateDiscountedPrice(product);
+            const productItem = document.createElement('div');
+            productItem.classList.add('product-item');
+            productItem.innerHTML = `
+                <h3>${product.name}</h3>
+                <p class="original-price"><s>$${product.price.toFixed(2)}</s></p>
+                <p class="discounted-price">$${discountedPrice.toFixed(2)} (${product.discountPercentage}% off)</p>
+                <button data-id="${product.id}">Add to Cart</button>
+            `;
+            productList.appendChild(productItem);
+        });
+    }
+
+    function renderCart() {
+        cartItems.innerHTML = '';
+        if (cart.length === 0) {
+            cartItems.innerHTML = '<p>Cart is empty.</p>';
+        } else {
+            cart.forEach(item => {
+                const itemDiscount = item.discountPercentage !== undefined ? item.discountPercentage : 0;
+                const discountedPrice = calculateDiscountedPrice(item);
+                const cartItemDiv = document.createElement('div');
+                cartItemDiv.classList.add('cart-item');
+                cartItemDiv.innerHTML = `
+                    <div>
+                        <span>${item.name} x ${item.quantity}</span><br>
+                        <span>$${(discountedPrice * item.quantity).toFixed(2)}</span>
+                    </div>
+                    <div class="discount-input-container">
+                        <input type="number" min="0" max="100" value="${itemDiscount}" data-id="${item.id}" class="item-discount-input"> %
+                    </div>
+                `;
+                cartItems.appendChild(cartItemDiv);
+            });
+            addDiscountInputListeners(); // Add listeners after rendering
+        }
+        updateCartTotal();
+    }
+
+    function updateCartTotal() {
+        const total = cart.reduce((sum, item) => sum + (calculateDiscountedPrice(item) * item.quantity), 0);
+        cartTotalSpan.textContent = total.toFixed(2);
+    }
+
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        if (product) {
+            const existingCartItem = cart.find(item => item.id === productId);
+            if (existingCartItem) {
+                existingCartItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1, discountPercentage: product.discountPercentage }); // Copy initial discount
+            }
+            renderCart();
+        }
+    }
+
+    function updateCartItemDiscount(productId, newDiscount) {
+        const cartItem = cart.find(item => item.id === productId);
+        if (cartItem) {
+            let discount = parseFloat(newDiscount);
+            if (isNaN(discount) || discount < 0) discount = 0;
+            if (discount > 100) discount = 100;
+            cartItem.discountPercentage = discount;
+            renderCart();
+        }
+    }
+
+    function addDiscountInputListeners() {
+        document.querySelectorAll('.item-discount-input').forEach(input => {
+            input.addEventListener('change', (event) => {
+                const productId = parseInt(event.target.dataset.id);
+                updateCartItemDiscount(productId, event.target.value);
+            });
+        });
+    }
+
+    // Locate the cart-section to add the customer name input
+    const cartSection = document.getElementById('cart-section');
+    const cartSummary = document.getElementById('cart-summary');
+
+    // Create and insert the customer name input field
+    const customerNameContainer = document.createElement('div');
+    customerNameContainer.innerHTML = `
+        <div class="customer-name-input-container">
+            <label for="customer-name">Customer Name:</label>
+            <input type="text" id="customer-name" placeholder="Enter customer name">
+        </div>
+    `;
+    cartSection.insertBefore(customerNameContainer, cartSummary);
+
+    function generateReceiptContent(currentCart, finalTotal, customerName = '') { // Added customerName parameter
+        const now = new Date();
+        const date = now.toLocaleDateString();
+        const time = now.toLocaleTimeString();
+
+        let itemsHtml = currentCart.map(item => {
+            const originalItemPrice = item.price * item.quantity;
+            const discountedItemPrice = calculateDiscountedPrice(item) * item.quantity;
+            const discountAmount = originalItemPrice - discountedItemPrice;
+            return `
+                <div class="receipt-item">
+                    <span>${item.name} x ${item.quantity}</span>
+                    <span>$${originalItemPrice.toFixed(2)}</span>
+                    ${item.discountPercentage > 0 ? `<span class="discount-line">(-${item.discountPercentage}%) -$${discountAmount.toFixed(2)}</span>` : ''}
+                    <span class="final-price">$${discountedItemPrice.toFixed(2)}</span>
+                </div>
+            `;
+        }).join('');
+
+        const subtotal = currentCart.reduce((sum, item) => sum + (item.price * item.quantity), 0); // Corrected subtotal calculation
+        const totalDiscount = subtotal - parseFloat(finalTotal);
+
+        return `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Receipt</title>
+                <style>
+                    body { font-family: 'Consolas', 'Monaco', monospace; font-size: 12px; line-height: 1.4; width: 400px; margin: 0 auto; padding: 15px; box-sizing: border-box; } /* Increased width to 400px */
+                    .header, .footer { text-align: center; margin-bottom: 15px; }
+                    .header h2 { margin: 0; font-size: 1.4em; }
+                    .header p { margin: 2px 0; }
+                    .separator { border-top: 1px dashed #000; margin: 10px 0; }
+                    .item-list { padding: 10px 0; margin-bottom: 15px; }
+                    .receipt-item { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 8px; } /* Allow wrapping */
+                    .receipt-item span { flex-basis: auto; /* Allow content to dictate initial size */ }
+                    .receipt-item span:nth-child(1) { flex-grow: 2; text-align: left; padding-right: 5px; } /* Name and quantity, takes more space */
+                    .receipt-item span:nth-child(2) { flex-grow: 1; text-align: right; padding-left: 5px; } /* Original price */
+                    .discount-line { color: #888; font-size: 0.9em; text-align: right; flex-grow: 1; padding-left: 5px; }
+                    .receipt-item .final-price { font-weight: bold; text-align: right; flex-grow: 1; padding-left: 5px; }
+                    .summary { margin-top: 15px; border-top: 1px dashed #000; padding-top: 10px; }
+                    .summary div { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                    .summary div span:first-child { text-align: left; }
+                    .summary div span:last-child { text-align: right; }
+                    .total { font-size: 1.3em; font-weight: bold; padding-top: 5px; border-top: 1px solid #000; margin-top: 10px; }
+                    .total span:first-child { text-transform: uppercase; }
+                    .footer p { margin: 5px 0; }
+                </style>
+            </head>
+            <body>
+                <div id="receipt-capture">
+                    <div class="header">
+                        <h2>Surgery Clinic SPA</h2> <!-- Updated store name -->
+                        <p>កាលបរិច្ឆេទ: ${date}</p>
+                        <p>ម៉ោង: ${time}</p>
+                        ${customerName ? `<p>អតិថិជន: ${customerName}</p>` : ''} <!-- Added customer name -->
+                        <p>-----------------------------------</p>
+                    </div>
+                    <div class="item-list">
+                        ${itemsHtml}
+                    </div>
+                    <div class="summary">
+                        <div><span>តម្លៃសរុប:</span> <span>$${subtotal.toFixed(2)}</span></div>
+                        <div><span>បញ្ចុះតម្លៃសរុប:</span> <span>-$${totalDiscount.toFixed(2)}</span></div>
+                        <div class="total"><span>សរុប:</span> <span>$${finalTotal}</span></div>
+                    </div>
+                    <div class="footer">
+                        <p>-----------------------------------</p>
+                        <p>អរគុណសម្រាប់ការជ្រើសរើសពួកយើង!</p>
+                    </div>
+                    <!-- Removed JPG button -->
+                </div>
+            </body>
+            </html>
+        `;
+    }
+
+    productList.addEventListener('click', (event) => {
+        if (event.target.tagName === 'BUTTON') {
+            const productId = parseInt(event.target.dataset.id);
+            addToCart(productId);
+        }
+    });
+
+    checkoutButton.addEventListener('click', async () => { // Made async for html2canvas
+        if (cart.length > 0) {
+            const finalTotal = cartTotalSpan.textContent;
+            const customerNameInput = document.getElementById('customer-name');
+            const customerName = customerNameInput ? customerNameInput.value.trim() : ''; // Get customer name
+
+            // --- Generate and save JPG automatically ---
+            const tempReceiptContainer = document.createElement('div');
+            tempReceiptContainer.style.position = 'absolute';
+            tempReceiptContainer.style.left = '-9999px'; // Hide it off-screen
+            tempReceiptContainer.innerHTML = generateReceiptContent(cart, finalTotal, customerName); // Pass customerName
+            document.body.appendChild(tempReceiptContainer);
+
+            const receiptElement = tempReceiptContainer.querySelector('#receipt-capture');
+            if (receiptElement && typeof html2canvas !== 'undefined') {
+                try {
+                    const canvas = await html2canvas(receiptElement, {
+                        scale: 2, // Increase resolution for better quality JPG
+                        width: 400, // Explicitly set width for consistent POS size
+                        windowWidth: 400 // Also set windowWidth for consistent rendering
+                    });
+                    const image = canvas.toDataURL('image/jpeg', 0.9); // 0.9 quality
+                    const link = document.createElement('a');
+                    link.download = `receipt_${customerName.replace(/[^a-zA-Z0-9]/g, '_') || 'customer'}_${new Date().getTime()}.jpg`; // Dynamic filename
+                    link.href = image;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } catch (error) {
+                    console.error('Error generating receipt JPG:', error);
+                    alert('Could not save receipt as JPG. Check console for details.');
+                }
+            } else {
+                console.error('html2canvas not loaded or receipt element not found.');
+                alert('HTML2Canvas library not loaded. Cannot save as JPG.');
+            }
+            document.body.removeChild(tempReceiptContainer); // Clean up temporary div
+            // --- End JPG generation ---
+
+
+            // --- Open print-friendly receipt in new window ---
+            const printReceiptHtml = generateReceiptContent(cart, finalTotal, customerName); // Pass customerName
+            const newWindow = window.open('', '_blank');
+            if (newWindow) {
+                newWindow.document.write(printReceiptHtml);
+                newWindow.document.close();
+                newWindow.focus();
+                // newWindow.print(); // User can manually print or print to PDF
+            } else {
+                alert('Please allow pop-ups for the receipt window.');
+            }
+            // --- End print-friendly receipt ---
+
+            // Clear cart after checkout
+            cart = [];
+            renderCart();
+            if (customerNameInput) customerNameInput.value = ''; // Clear customer name input
+        } else {
+            alert('Your cart is empty!');
+        }
+    });
+
+    // Initial render
+    renderProducts();
+    renderCart();
 });

@@ -1,115 +1,45 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS NamSpa-SHOP សេវាកម្ម</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Surgery Clinic SPA System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>POS NamSpa-SHOP</h1>
-            <p>ប្រព័ន្ធគ្រប់គ្រងការលក់សម្រាប់ហាងស្ប៉ា</p>
-        </div>
+        <h1>Surgery Clinic SPA Terminal</h1>
     </header>
 
-    <main class="container">
-        <div>
-            <section id="service-list-section">
-                <h2>សេវាកម្មដែលមាន</h2>
-                <div id="service-list" class="service-grid">
-                    <!-- Services will be loaded here by JavaScript -->
-                </div>
-            </section>
-
-            <section id="add-service-section">
-                <h2>បន្ថែម​សេវាកម្ម​ថ្មី</h2>
-                <form id="add-service-form">
-                    <div class="form-group">
-                        <label for="service-name">ឈ្មោះ​សេវាកម្ម:</label>
-                        <input type="text" id="service-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="service-price">តម្លៃ (USD):</label>
-                        <input type="number" id="service-price" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="service-description">ការពិពណ៌នា:</label>
-                        <textarea id="service-description" rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn secondary-btn">បន្ថែម​សេវាកម្ម</button>
-                </form>
-            </section>
-        </div>
-
-        <aside id="order-list-section">
-            <h2>បញ្ជីសេវាកម្ម</h2>
-            <div class="form-group">
-                <label for="customer-name">ឈ្មោះ​អតិថិជន:</label>
-                <input type="text" id="customer-name" placeholder="បញ្ចូលឈ្មោះអតិថិជន">
+    <div id="app-container">
+        <main id="products-section">
+            <h2>សេវាកម្ម</h2>
+            <div id="product-list">
+                <!-- Product items will be loaded here by JavaScript -->
             </div>
-            <div id="order-list">
-                <p id="order-empty-message">ការពិពណ៌នា</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>សេវាកម្ម</th>
-                            <th>តម្លៃ</th>
-                            <th>ចំនួន</th>
-                            <th>បញ្ចុះតម្លៃ (%)</th>
-                            <th>សរុប</th>
-                            <th>សកម្មភាព</th>
-                        </tr>
-                    </thead>
-                    <tbody id="order-items">
-                        <!-- Order items will be loaded here by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
+        </main>
 
-            <div class="order-summary">
-                <div class="order-subtotal">
-                    <span>សរុបរង:</span>
-                    <span id="order-subtotal-price">0.00</span> USD
-                </div>
-                <div class="order-discount">
-                    <span>បញ្ចុះតម្លៃសរុប:</span>
-                    <span id="order-total-discount">0.00</span> USD
-                </div>
-                <div class="order-total">
-                    <strong>សរុប:</strong>
-                    <strong><span id="order-total-price">0.00</span> USD</strong>
-                </div>
+        <aside id="cart-section">
+            <h2>សេវាកម្មដែលបានជ្រើសរើស</h2>
+            <div id="cart-items">
+                <!-- Cart items will be loaded here by JavaScript -->
+                <p>Cart is empty.</p>
             </div>
-
-            <div class="order-actions">
-                <button id="pay-button" class="btn primary-btn">Pay</button>
-                <button id="print-order-button" class="btn primary-btn">បោះពុម្ពវិក្កយបត្រ</button>
-                <button id="save-jpg-button" class="btn secondary-btn">រក្សាទុក ជា JPG</button>
-                <button id="clear-receipt-button" class="btn secondary-btn">សម្អាតទាំងអស់</button>
-            </div>
-
-            <div id="aba-qr-payment-section" style="display: none; margin-top: 20px; text-align: center;">
-                <h4>ABA QR Payment</h4>
-                <img id="aba-qr-code-image" src="" alt="ABA QR Code">
-                <p>Total: <span id="aba-payment-amount">0.00</span> USD</p>
-                <button id="confirm-aba-payment-button" class="btn primary-btn">Confirm Payment</button>
-                <button id="cancel-aba-payment-button" class="btn secondary-btn">Cancel</button>
+            <div id="cart-summary">
+                <p>Total: $<span id="cart-total">0.00</span></p>
+                <button id="checkout-button">Checkout</button>
             </div>
         </aside>
-    </main>
+    </div>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2026 POS NamSpa-SHOP</p>
-        </div>
+        <p>&copy; 2026 POS-NAM. All rights reserved.</p>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="script.js"></script>
-    <div id="pos-receipt-print-area" style="display: none;"></div>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </body>
 </html>
