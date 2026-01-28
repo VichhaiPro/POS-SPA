@@ -10,4 +10,45 @@
       </div>
     </nav>
   </header>
+
+<section id="home" style="
+  max-width:950px;
+  margin:40px auto;
+  padding:40px;
+  background:#fff8f0;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  font-family:'Khmer OS Siemreap', 'Segoe UI', Arial, sans-serif;
+  text-align:center;
+">
+  <h1 style="color:#6a1b9a;">សូមស្វាគមន៍ មកកាន់ Romans Small Group 2026</h1>
+  <p style="font-size:18px;color:#555;margin-top:15px;">
+    យើងសូមចែករំលែកព្រះគម្ពីរនិងការអធិស្ឋានជាមួយគ្នា រៀងរាល់សប្ដាហ៍។ 🙏
+  </p>
+
+  <!-- Bible Verse Rotator -->
+  <div id="bibleVerse" style="margin-top:25px;font-size:20px;color:#2c3e50;font-weight:bold;line-height:1.6;">
+    Loading verse...
+  </div>
+</section>
+
+<script>
+// List of Bible verses in Khmer
+const verses = [
+  
+  "យ៉ូហាន 3:16 – ព្រះមេត្តានឹងព្រះចៅរាជ្យបានសេចក្តីស្រលាញ់លោកយើងយ៉ាងហោចណាស់។",
+  "ភិតា 4:8 – តែដើម្បីអ្វីដែលសុចរិត ពិតប្រាកដ និងស្អាតចិត្ត។",
+  "ម៉ាថាយ 5:16 – ឲ្យពន្លឺរបស់អ្នកភ្លឺនៅមុខមនុស្ស។"
+];
+
+// Function to rotate verses every 10 seconds
+let verseIndex = 0;
+function showVerse() {
+  document.getElementById("bibleVerse").textContent = verses[verseIndex];
+  verseIndex = (verseIndex + 1) % verses.length;
+}
+showVerse();
+setInterval(showVerse, 10000);
+</script>
+
   
