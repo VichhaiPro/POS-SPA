@@ -92,75 +92,38 @@ setInterval(showVerse, 8000); // ប្ដូរ រៀងរាល់ 8 វិ�
 ">
 </div>
 
-<section id="members" style="margin-top:50px;">
-  <h2 style="text-align:center;color:#6a1b9a;">👥 Group Members</h2>
+<section id="team" style="
+  max-width:900px;
+  margin:40px auto;
+  padding:30px;
+  background:#f8f9ff;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.06);
+  font-family:'Segoe UI','Khmer OS Siemreap',Arial,sans-serif;
+">
 
-  <!-- Member List -->
-  <ul id="memberList" style="max-width:400px;margin:20px auto;padding:0;"></ul>
+  <h2 style="text-align:center;color:#4a2c82;">👥 សមាជិកក្រុម Small Group</h2>
+  <p style="text-align:center;color:#555;">
+    ក្រុមចែករំលែកព្រះបន្ទូល និងអធិស្ឋានរួមគ្នា
+  </p>
 
-  <!-- Add Member -->
-  <div style="text-align:center;margin-top:20px;">
-    <input type="text" id="newMember" placeholder="Enter member name"
-      style="padding:10px;width:220px;border-radius:8px;border:1px solid #ccc;">
-    <br><br>
-    <button onclick="addMember()"
-      style="padding:10px 18px;border:none;border-radius:8px;
-      background:#6a1b9a;color:#fff;cursor:pointer;">
-      ➕ Add Member
-    </button>
-  </div>
+  <ul style="
+    list-style:none;
+    padding:0;
+    max-width:400px;
+    margin:30px auto 0;
+    font-size:16px;
+    line-height:2;
+  ">
+    <li>📌 Khoem Toeurn</li>
+    <li>📌 Vichhai Samrith</li>
+    <li>📌 Bonthoeurn Daniel</li>
+    <li>📌 David Pean</li>
+    <li>📌 Doeun Lai</li>
+  </ul>
+
 </section>
 
-<script>
-  let members = JSON.parse(localStorage.getItem("members")) || [
-    "Khoem Toeurn",
-    "Vichhai Samrith",
-    "Bonthoeurn Daniel",
-    "David Pean",
-    "Doeun Lai"
-  ];
-
-  function renderMembers() {
-    const list = document.getElementById("memberList");
-    list.innerHTML = "";
-    members.forEach((member, index) => {
-      list.innerHTML += `
-        <li style="
-          list-style:none;
-          background:#f3e5f5;
-          margin:8px 0;
-          padding:10px 15px;
-          border-radius:10px;
-          display:flex;
-          justify-content:space-between;
-          align-items:center;">
-          ${member}
-          <button onclick="removeMember(${index})"
-            style="background:red;color:white;
-            border:none;border-radius:6px;padding:4px 8px;cursor:pointer;">
-            ✖
-          </button>
-        </li>`;
-    });
-    localStorage.setItem("members", JSON.stringify(members));
-  }
-
-  function addMember() {
-    const input = document.getElementById("newMember");
-    if (input.value.trim() !== "") {
-      members.push(input.value.trim());
-      input.value = "";
-      renderMembers();
-    }
-  }
-
-  function removeMember(index) {
-    members.splice(index, 1);
-    renderMembers();
-  }
-
-  renderMembers();
-</script>
 
 </body>
 </html>
