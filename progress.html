@@ -57,5 +57,71 @@ function updateProgress(){const total=checkboxes.length;let completed=0;checkbox
 checkboxes.forEach(box=>{const key=box.dataset.week;box.checked=localStorage.getItem(key)==='true';box.addEventListener('change',()=>{localStorage.setItem(key,box.checked);updateProgress();});});
 updateProgress();
 </script>
+
+<section>
+<h1>✅ Romans Study Progress (16 Weeks)</h1>
+<p style="text-align:center;color:#666;">
+✓ Tick when each chapter is completed
+</p>
+
+<div class="progress-wrap">
+  <div id="progress-bar">0%</div>
+</div>
+
+<table>
+<thead>
+<tr>
+  <th>Week</th>
+  <th>Romans Chapter</th>
+  <th>Leader</th>
+  <th>Done</th>
+</tr>
+</thead>
+<tbody>
+
+<tr><td>1</td><td>Romans 1</td><td>Bonthoeurn</td><td align="center"><input type="checkbox" class="chk" data-key="w1"></td></tr>
+<tr><td>2</td><td>Romans 2</td><td>David</td><td align="center"><input type="checkbox" class="chk" data-key="w2"></td></tr>
+<tr><td>3</td><td>Romans 3</td><td>Vichhai</td><td align="center"><input type="checkbox" class="chk" data-key="w3"></td></tr>
+<tr><td>4</td><td>Romans 4</td><td>Lai</td><td align="center"><input type="checkbox" class="chk" data-key="w4"></td></tr>
+<tr><td>5</td><td>Romans 5</td><td>Bonthoeurn</td><td align="center"><input type="checkbox" class="chk" data-key="w5"></td></tr>
+<tr><td>6</td><td>Romans 6</td><td>David</td><td align="center"><input type="checkbox" class="chk" data-key="w6"></td></tr>
+<tr><td>7</td><td>Romans 7</td><td>Vichhai</td><td align="center"><input type="checkbox" class="chk" data-key="w7"></td></tr>
+<tr><td>8</td><td>Romans 8</td><td>Lai</td><td align="center"><input type="checkbox" class="chk" data-key="w8"></td></tr>
+<tr><td>9</td><td>Romans 9</td><td>Bonthoeurn</td><td align="center"><input type="checkbox" class="chk" data-key="w9"></td></tr>
+<tr><td>10</td><td>Romans 10</td><td>David</td><td align="center"><input type="checkbox" class="chk" data-key="w10"></td></tr>
+<tr><td>11</td><td>Romans 11</td><td>Vichhai</td><td align="center"><input type="checkbox" class="chk" data-key="w11"></td></tr>
+<tr><td>12</td><td>Romans 12</td><td>Lai</td><td align="center"><input type="checkbox" class="chk" data-key="w12"></td></tr>
+<tr><td>13</td><td>Romans 13</td><td>Bonthoeurn</td><td align="center"><input type="checkbox" class="chk" data-key="w13"></td></tr>
+<tr><td>14</td><td>Romans 14</td><td>David</td><td align="center"><input type="checkbox" class="chk" data-key="w14"></td></tr>
+<tr><td>15</td><td>Romans 15</td><td>Vichhai</td><td align="center"><input type="checkbox" class="chk" data-key="w15"></td></tr>
+<tr><td>16</td><td>Romans 16</td><td>Lai</td><td align="center"><input type="checkbox" class="chk" data-key="w16"></td></tr>
+
+</tbody>
+</table>
+</section>
+
+<script>
+const checks = document.querySelectorAll('.chk');
+const bar = document.getElementById('progress-bar');
+
+function updateProgress(){
+  let done = 0;
+  checks.forEach(c => { if(c.checked) done++; });
+  const percent = Math.round((done / checks.length) * 100);
+  bar.style.width = percent + '%';
+  bar.textContent = percent + '%';
+}
+
+checks.forEach(c=>{
+  const key = c.dataset.key;
+  c.checked = localStorage.getItem(key) === 'true';
+  c.addEventListener('change',()=>{
+    localStorage.setItem(key, c.checked);
+    updateProgress();
+  });
+});
+
+updateProgress();
+</script>
 </body>
 </html>
