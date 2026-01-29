@@ -6,6 +6,24 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyCd-FGrbCelEUN370I0wmzscnLjYxxX200",
+  authDomain: "bible-group-2026.firebaseapp.com",
+  projectId: "bible-group-2026",
+  storageBucket: "bible-group-2026.firebasestorage.app",
+  messagingSenderId: "639986298395",
+  appId: "1:639986298395:web:d9d92344e516c4f5e112be"
+};
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
 <!-- Menu Bar -->
 <?php include 'header.html'; ?>
 <header style="background:#6a1b9a;color:#fff;padding:15px 30px;border-radius:8px;">
@@ -123,6 +141,52 @@ setInterval(showVerse, 8000); // ប្ដូរ រៀងរាល់ 8 វិ�
   </ul>
 
 </section>
+
+<script>
+  const memberList = document.getElementById("memberList");
+
+  function renderMembers() {
+    memberList.innerHTML = "";
+    db.collection("members").get().then(snapshot => {
+      snapshot.forEach(doc => {
+        const li = document.createElement("li");
+        li.style = `
+          list-style:none;
+          background:#f3e5f5;
+          margin:8px 0;
+          padding:10px;
+          border-radius:10px;
+          display:flex;
+          justify-content:space-between;`;
+
+        li.innerHTML = `
+          ${doc.data().name}
+          <button onclick="removeMember('${doc.id}')"
+            style="background:red;color:white;border:none;
+            border-radius:6px;padding:4px 8px;">✖</button>
+        `;
+        memberList.appendChild(li);
+      });
+    });
+  }
+
+  function addMember() {
+    const name = document.getElementById("newMember").value.trim();
+    if (name !== "") {
+      db.collection("members").add({ name: name });
+      document.getElementById("newMember").value = "";
+      setTimeout(renderMembers, 300);
+    }
+  }
+
+  function removeMember(id) {
+    db.collection("members").doc(id).delete();
+    setTimeout(renderMembers, 300);
+  }
+
+  renderMembers();
+</script>
+
 
 
 </body>
