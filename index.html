@@ -2,21 +2,24 @@
 <html lang="km">
 <head>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-<script>
+  // Your web app's Firebase configuration
   const firebaseConfig = {
-  apiKey: "AIzaSyCd-FGrbCelEUN370I0wmzscnLjYxxX200",
-  authDomain: "bible-group-2026.firebaseapp.com",
-  projectId: "bible-group-2026",
-  storageBucket: "bible-group-2026.firebasestorage.app",
-  messagingSenderId: "639986298395",
-  appId: "1:639986298395:web:d9d92344e516c4f5e112be"
-};
+    apiKey: "AIzaSyCd-FGrbCelEUN370I0wmzscnLjYxxX200",
+    authDomain: "bible-group-2026.firebaseapp.com",
+    projectId: "bible-group-2026",
+    storageBucket: "bible-group-2026.firebasestorage.app",
+    messagingSenderId: "639986298395",
+    appId: "1:639986298395:web:d9d92344e516c4f5e112be"
+  };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
 </script>
   
 <meta charset="UTF-8">
