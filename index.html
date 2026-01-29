@@ -184,7 +184,6 @@ window.addMember = async () => {
 window.deleteMember = async (id) => {
   await deleteDoc(doc(db, "members", id));
 };
-</script>
 
 members.forEach(name=>{
   const card = document.createElement("div");
@@ -204,6 +203,9 @@ members.forEach(name=>{
 
   btnBox.appendChild(card);
 });
+
+</script>
+
 
 
 
